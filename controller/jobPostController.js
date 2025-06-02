@@ -37,7 +37,7 @@ export const add = async (req, res) => {
     try {
         // console.log("first", req.body)
         // joi validation
-        let { error } = jobPostSchema.validate(req.query, options)
+        let { error } = jobPostSchema.validate(req.body, options)
 
         if (error) {
             return res.status(400).json({ message: error.details[0]?.message, statusCode: 400 })
@@ -179,10 +179,8 @@ export let get_job_list = async (req, res) => {
         let temp = []
         for (let le of getAll) {
             // console.log(le, "lele")
-            let get = le?.applied_user?.find((a, b) => {
-                a?.user_id == getuserdata?.id
-                return a
-            })
+            let get = le?.applied_user?.find((a, b) => a?.user_id == getuserdata?.id)
+            console.log(get,"getuserdata",getuserdata?.id)
             if (get) {
                 temp.push(le)
             }
