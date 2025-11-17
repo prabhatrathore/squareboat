@@ -1,0 +1,20 @@
+import { Sequelize, DataTypes } from "sequelize";
+import dbconnection from "../config/dbconfig.js";
+
+
+const orderModel = dbconnection.define(
+    "order", {
+
+    id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true, allowNull: false },
+    order_id: { type: DataTypes.STRING, allowNull: false },
+    order_date: { type: DataTypes.DATE, defaultValue: DataTypes.DATE },
+    amount: { type: DataTypes.STRING, allowNull: false },
+    user_id: { type: DataTypes.STRING, allowNull: false },
+    products: { type: DataTypes.JSON, allowNull: true },
+
+    updated_at: { type: DataTypes.NOW, defaultValue: DataTypes.NOW },
+    created_at: { type: DataTypes.NOW, defaultValue: DataTypes.NOW },
+}, { timestamps: false, tableName: "ordermodel" }
+)
+export default orderModel
+
