@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 import dbconnection from "../config/dbconfig.js";
+import mongoose from "mongoose";
 
 
 const orderModel = dbconnection.define(
@@ -18,3 +19,15 @@ const orderModel = dbconnection.define(
 )
 export default orderModel
 
+export const orderMongooseModel = new mongoose.Schema(
+    {
+        _id: { type: mongoose.Schema.Types.ObjectId },
+        order_id: { type: mongoose.Schema.Types.ObjectId },
+        order_date: { type: mongoose.Schema.Types.ObjectId },
+        amount: { type: String, require: true },
+        useer_id: { type: mongoose.Schema.Types.ObjectId },
+        products: { types: mongoose.Schema.Types.Mixed }
+    }, {
+    timestamps: true
+}
+)
