@@ -17,9 +17,9 @@ const jobPostModel = dbconnection.define(
 )
 export default jobPostModel
 
-export const jobPostModelMongoose = new mongoose.Schema(
+const jobPostModelMongoose = new mongoose.Schema(
     {
-        _id: { type: mongoose.Schema.Types.ObjectId },
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
         user_id: { type: mongoose.Schema.Types.ObjectId },
         title: { type: String },
         description: { type: String },
@@ -28,3 +28,4 @@ export const jobPostModelMongoose = new mongoose.Schema(
     timestamps: true
 }
 )
+export const jobPostModelMongoose2 = mongoose.model("jobPost", jobPostModelMongoose)

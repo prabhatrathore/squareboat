@@ -17,14 +17,15 @@ const cartModel = dbconnection.define(
 )
 export default cartModel
 
-export const cartMongoModel = new mongoose.Schema(
+const cartMongoModel = new mongoose.Schema(
     {
-        _id: { type: mongoose.Schema.Types.ObjectId },
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
         user_id: { type: mongoose.Schema.Types.ObjectId },
         product_id: { type: mongoose.Schema.Types.ObjectId },
-        quantity: { type: mongoose.Schema.Types.ObjectId }
+        quantity: { type: Number }
 
     }, {
     timestamps: true
 }
 )
+export const cartMongoModel2 = mongoose.model("cart", cartMongoModel)

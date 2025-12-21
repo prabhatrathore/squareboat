@@ -19,17 +19,6 @@ const productModel = dbconnection.define(
 export default productModel
 // productModel.belongsTo(UserModel,{foreignKey:"id"})
 
-export const productMongooseModel = new mongoose.Schema(
-  {
-    _id: { type: mongoose.Schema.Types.ObjectId },
-    user_id: { type: mongoose.Schema.Types.ObjectId },
-    name: { type: String },
-    quantity: { type: String },
-    description: { type: String }
-  }, {
-  timestamps: true
-}
-)
 /**
  CREATE TABLE `product` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -42,3 +31,16 @@ export const productMongooseModel = new mongoose.Schema(
 );
 
  */
+const productMongooseModel = new mongoose.Schema(
+  {
+    _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    user_id: { type: mongoose.Schema.Types.ObjectId },
+    name: { type: String },
+    quantity: { type: String },
+    description: { type: String }
+  }, {
+  timestamps: true
+}
+)
+
+export const productMongooseModel2 = mongoose.model("product", productMongooseModel)

@@ -19,9 +19,9 @@ const orderModel = dbconnection.define(
 )
 export default orderModel
 
-export const orderMongooseModel = new mongoose.Schema(
+const orderMongooseModel = new mongoose.Schema(
     {
-        _id: { type: mongoose.Schema.Types.ObjectId },
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
         order_id: { type: mongoose.Schema.Types.ObjectId },
         order_date: { type: mongoose.Schema.Types.ObjectId },
         amount: { type: String, require: true },
@@ -31,3 +31,4 @@ export const orderMongooseModel = new mongoose.Schema(
     timestamps: true
 }
 )
+export const orderMongooseModel2 = mongoose.model("order", orderMongooseModel)

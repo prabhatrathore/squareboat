@@ -27,9 +27,15 @@ import { Op } from 'sequelize'
 import dbconnection from './config/dbconfig.js'
 import mongoose from 'mongoose'
 import { userMongoModel2 } from './model/userModel.js'
+import { productMongooseModel2 } from './model/productModel.js'
+import { orderMongooseModel2 } from './model/orderModel.js'
+import { jobPostModelMongoose2 } from './model/jobPostModel.js'
+import { cartMongoModel2 } from './model/cartModel.js'
+
 const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json())  // Converts JSON data from req.body into a JavaScript object
+app.use(express.urlencoded({ extended: true })) // express.urlencoded() -> Parse form data
+// extended: true   -> Support nested objects
 
 app.use("/server", (req, res) => {
     return res.json({ message: "server connected", statusCode: 200 })
@@ -60,11 +66,10 @@ async function solMongo() {
     // let result = await userMongoModel2.create(obj)
     // console.log(result, 'resultresult')
     //-----------------------------------------------------------------------------
-    //  get = await userMongoModel2.find({ name: "john" })
-
+    // get = await userMongoModel2.find({})
+    // console.log(get,'gggggg')
     //-----------------------------------------------------------------------------
     //  get = await userMongoModel2.find({ name: "john",age:21 }) // AND
-
     // //-----------------------------------------------------------------------------
     // get = await userMongoModel2.find({
     //     $or: [
@@ -74,77 +79,143 @@ async function solMongo() {
     //         // { name: "john" }
     //     ]
     // })
+    // get=await userMongoModel2.find({
+    //     $or:[
+    //         {age:21},
+    //         {age:22},
+    //         {name:"joh"}
+    //     ]
+    // })
+
+    // get = await userMongoModel2.find({
+    //     $and: [
+    //         { age: [21, 22] },
+    //         { name: ['john', 'johny'] }
+    //     ]
+    // })
+    // get = await userMongoModel2.find({
+    //     $or: [
+    //         { age: [21] },
+    //         { name: ['sonu one'] }
+    //     ]
+    // })
+    // console.log(get, ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
     //-----------------------------------------------------------------------------
     // //-----------------------------------------------------------------------------
     // ✔ 5. IN operator
     //     db.users.find({ age: { $in: [20, 25, 30] } })
-    // get = await userMongoModel2?.find({
-    //     age: { $in: [21] },
-    //     name: { $in: ["sonu"] }
-    // })
+
+
     // get = await userMongoModel2?.find({
     //     age: { $in: [21,23] },
     //     // age: { $in: [23] },// here is redefine this 'age' data
     //     // name: { $in: ['john','johny one'] }
     // })
-
+    // .................................................................
+    // get = await userMongoModel2.find({
+    //     age: { $in: [21, 22] },
+    //     name: { $in: ['johny'] }
+    // })
+    // get = await userMongoModel2.find({
+    //     $and: [
+    //         { age: { $in: [21, 22] } },
+    //         { name: { $in: ['johny'] } }
+    //     ]
+    // })
+    // get = await userMongoModel2.find({
+    //     // age:{$in:[21,22]}
+    //     name: { $in: ['john','sonu','Admin'] } 
+    // })
     //////////////////////////////////////////////////////////////
 
     // ✔ 6. NOT IN operator
-    //     db.users.find({ age: { $nin: [18, 40] } })
+    //     db.users.find({ age: { $nin: [18, 40] } }) 
     // get = await userMongoModel2?.find({
     //     age: { $nin: [21, 23] },
     //     name: { $nin: ['johny',] }
     // })
+
+    get = await userMongoModel2.find({
+        age: { $in: [21, 22, 23] },
+        // name: { $in: ['john'] },
+        "address.street": { $in: [204] }
+    },/*{name:1}*/)
+    // console.log(get, "gggggggggggggggggg")
+    // get = await userMongoModel2.find({
+    //     age: { $nin: [22] },
+    //     "address.street": { $nin: [204] }
+    // })
+    // ---------------------------------------------------------------------------------------------
 
     // ✔ 7. Comparison operators
     // Greater than, Less than
     //     db.users.find({ age: { $gt: 18 } })
     //     db.users.find({ age: { $lt: 40 } })
     //     db.users.find({ age: { $gte: 18, $lte: 30 } })
+
+    // get = await userMongoModel2.find({
+    //     // age: { $gte: 23 }
+    //     // age: { $gt: 23 },
+    //     age: { $gt: 21, $lte: 43 }
+    // }, { name: 1, age: 1, email: 1, password: 1 })
     get = await userMongoModel2.find({
-        // age: { $gte: 23 }
-        // age: { $gt: 23 },
-        age: { $gt: 21, $lte: 43 }
-    }, { name: 1, age: 1, email: 1, password: 1 })
 
-    // for (let le of get) {
-    //     let age = Number(le.age)||20
-    //     let get1 = await userMongoModel2.findOneAndUpdate(
-    // { _id: le._id },      // find condition
-    // { $set: { age: age } }, // updated field
-    // {new :true }    //return updated document
-    //  )
-    //     console.log(get1, 'gttttttttttt')
+        age: { $lt: 123 }
+    })
+    // console.log(get, 'gg')
+    // --------------------------------------------------------------------------------------------
+    for (let le of get) {
+        //     let age = Number(le.age)||20
+        let temp = Math.floor(Math.random() * 100000)
+        // console.log(temp,'eweweqweefvv')
+        let obj = {}
+        //  obj.address={...le.address}
+        // obj.address.tempData=temp
+        // obj.oldAge=le.age+temp 
+        // console.log(obj,'object')
+        //     let get1 = await userMongoModel2.findOneAndUpdate(
+        //      { _id: le._id },      // find condition
+        // { $set: obj }, // updated field
+        // {new :true }    //return updated document
+        //  )
+        // console.log(get1, 'gttttttttttt')
 
-    // get=await userMongoModel2.findOneAndUpdate(
-    //     {_id:le._id},
-    //     {$inc:{stock:-1}},
-    //     {new:true}
-    // )
-    // console.log(get.,'wwwwwww)
+        // get = await userMongoModel2.findOneAndUpdate(
+        //     { _id: le._id },
+        //     { $inc: { age: 10 }},
+        //     { new: true }
+        // )
+        // console.log(get, 'wwwwwww')
 
-    // ✅ 3. Update Only If Document Exists (Upsert)
-    // If not found → create a new one.
-    // let g = await userMongoModel2.findOneAndUpdate(
-    //     { email: "admin@gmail.com" },
-    //     { $set: { role: "admin" } },
-    //     { new: true, upsert: true }
-    // )
-    // ✅ 4. Add Item to Array Using $push
-    // g = await userMongoModel2.findOneAndUpdate(
-    //     { _id: le._id },
-    //     { $push: { wishlist: tempId } },
-    //     { new: true }
-    // )
-    // ✅ 5. Remove Item From Array Using $pull
-    // g = await userMongoModel2.findOneAndUpdate(
-    //     // (_id: le._id),
-    //     { $pull: { wishlist: temp_product_id } },
-    //     { new: true }
-    // )
+        // ✅ 3. Update Only If Document Exists (Upsert)
+        // If not found → create a new one.
+        // let g = await userMongoModel2.findOneAndUpdate(
+        //     { email: "admin@gmail.com" },
+        //     { $set: { role: "admin" } },
+        //     { new: true, upsert: true }
+        // )
+        // ✅ 4. Add Item to Array Using $push
+        // g = await userMongoModel2.findOneAndUpdate(
+        //     { _id: le._id },
+        //     { $push: { wishlist: tempId } },
+        //     { new: true }
+        // )
+        // let g = await userMongoModel2.findOneAndUpdate(
+        //     { _id: le._id },
+        //     { $push: { wishlist: temp } },
+        //     { new: true }
+        // )
+        // console.log(g, 'ggbbvvvvvvvvvvefw')
+        // // -----------------------------------------------------------------------------------------------
 
-    // }
+        // ✅ 5. Remove Item From Array Using $pull
+        //     g = await userMongoModel2.findOneAndUpdate(
+        //         { _id: le._id },
+        //         { $pull: { wishlist: temp_product_id } },
+        //         { new: true }
+        //     )
+    }
+    // ---------------------------------------------------------------------------------------------
 
     // ✔ 8. Projection — select only specific fields
     //     db.users.find({}, { name: 1, age: 1, _id: 0 })  // include fields
@@ -153,15 +224,24 @@ async function solMongo() {
     // ✔ 9. Sort the result
     //     db.users.find().sort({ age: 1 })   // Ascending
     //     db.users.find().sort({ age: -1 })  // Descending
+    // --------------------------------------------------------------------------------------------------------
 
     // get = await userMongoModel2.find({ age: { $gt: 2, $lt: 44 } }, { name: 1, age: 1 }).skip(0).limit(40)
     // ✔ 10. Limit / Skip(Pagination)
     //     db.users.find().limit(10)
     //     db.users.find().skip(20)
-    //     db.users.find().skip(20).limit(10) // page results
+    //     db.users.find().skip(20).limit(10) // page results 
+    get = await userMongoModel2.find({ age: { $gt: 2, $lt: 333 } }, { name: 1, age: 1 }).skip(0).limit(40)
+    // await userMongoModel2.findOneAndUpdate({ _id: "692d8bef0e318de26e7bd64e" }, { $inc: {age : 3 } })
+    // console.log(get, 'llllllpppppoooooooommmmmmjjjjjjjj')
+    // ----------------------------------------------------------------------------------------------
+
     // ✔ 11. Count records
     //     db.users.countDocuments({ age: 25 })
     // get = await userMongoModel2.countDocuments({ age: 24 })
+    get = await userMongoModel2.countDocuments({ age: 34 })
+    // console.log(get, "gete")
+
     // ----------------------------------------------------------------------------------------------
 
 
@@ -170,62 +250,180 @@ async function solMongo() {
 
     // ✔ 12. Check document exists
     //     db.users.findOne({ email: "abc@test.com" })
-    // get=await userMongoModel2.findOne({email:'admin@gmail.com'})
+    // get = await userMongoModel2.findOne({email:'admin@gmail.com'})
     // ---------------------------------------------------------------------------------------------------
 
     // ✔ 13. Regex search
-    //     db.users.find({ name: { $regex: "^A", $options: "i" } })
+    //     db.users.find({ name: { $regex: "^A", $options: "i" } }) ///$options: "i" makes the regular expression         case-insensitive, so MongoDB matches values regardless of uppercase or lowercase letters.
+
+    // get=await userMongoModel2.find({name:{$regex:"^JO",$options:"i" }    },{name:1,email:1} )
+    // console.log(get,'pppppppppppppppppppppp')
+
     // get = await userMongoModel2.find({ name: { $regex: "^joh" } })
+    // get = await userMongoModel2.find({ name: { $regex: "^j" } }, { name: 1, email: 1, })
+    // get = await userMongoModel2.find({ email: { $regex: "^a" } }, { name: 1, email: 1 })//yaha pr first letter se hhee kr skte hai , middle word nhi lega
     // ---------------------------------------------------------------------------------------------------
 
     // ✔ 14. Find inside nested object
     //     db.users.find({ "address.city": "Mumbai" })
-    get = await userMongoModel2.find()
-    let i = 110045
+    // get = await userMongoModel2.find({ "address.pincode": 110048 })
+    // get = await userMongoModel2.find()
+    // let i = 110045
     // console.log(Math.round(Math.random() * 10000), 'Math.random()*1000 ')
-    for (let le of get) {
-        let random = Math.round(Math.random() * 10000)
-        let addobj = {
-            street: random,
-            name: `name of location number: ${random}`,
-            pincode: i
-        }
-        i = i + 1
-        // await userMongoModel2?.findOneAndUpdate({ _id: le._id }, { address: addobj })
-        let wishlist = ['abcd', 'efg', 'hijkl', 'mnop', 'qrst', 'uvwx']
-        let temp = random + 'abcd' + random
-        wishlist.push(temp)
-        // await userMongoModel2?.findOneAndUpdate({ _id: le._id }, { wishlist: wishlist })
-        let test_number = [random]
-        // await userMongoModel2.findOneAndUpdate({ _id: le._id }, { test_number })
-    }
+    // for (let le of get) {
+    //     let random = Math.round(Math.random() * 10000)
+    //     let addobj = {
+    //         street: random,
+    //         name: `name of location number: ${random}`,
+    //         pincode: i
+    //     }
+    //     i = i + 1
+    //     // await userMongoModel2?.findOneAndUpdate({ _id: le._id }, { address: addobj })
+    //     let wishlist = ['abcd', 'efg', 'hijkl', 'mnop', 'qrst', 'uvwx']
+    //     let temp = random + 'abcd' + random
+    //     wishlist.push(temp)
+    //     // await userMongoModel2?.findOneAndUpdate({ _id: le._id }, { wishlist: wishlist })
+    //     let test_number = [random]
+    //     // await userMongoModel2.findOneAndUpdate({ _id: le._id }, { test_number })
+    // }
     // ---------------------------------------------------------------------------------------------------
     // get =await userMongoModel2.find({"address.pincode":110046})
     // ---------------------------------------------------------------------------------------------------
 
     // ✔ 15. Find inside array
     //     db.users.find({ hobbies: "cricket" })
-    // get = await userMongoModel2.find({ wishlist: "2424abcd2424" }, { name: 1, wishlist: 1 })
+    // get = await userMongoModel2.find({ wishlist: "qrst" }, { name: 1, wishlist: 1 })
+    // console.log(get,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
 
-    // ✔ 16. Find array containing element > condition
+    // ✔ 16. Find array containing element > condition   ....array ke element , agr condition  se match krte hai tb result dega
     //     db.products.find({ prices: { $elemMatch: { $gt: 500 } } })
     //  get = await userMongoModel2.find({ test_number: { $elemMatch: { $gte: 8620 } } })
+    // get = await userMongoModel2.find({ wishlist: { $regex: "^ef" } })
+    // console.log(get, 'getttttt')
+    // ---------------------------------------------------------------------------------------------------
+    // get = await userMongoModel2.find({ test_number: { $elemMatch: { $gte: 8403 } } })// array ke elemetn ko bhi search kr sktea h 
+    // get = await userMongoModel2.find({ age: { $gt: 22 } })
+    // 
+    // $elemMatch should only be used with array fields;
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    let productobj = {
+        user_id: "6934245808d9977c74569a67",
+        name: "apple aone",
+        quantity: 1201,
+        description: "qwertyu heeloo hello world"
+    }
+
+    // let p = await productMongoose.create(productobj)
+    // console.log(p, "ppppp")
+    let cobj = {
+        user_id: "692d8bef0e318de26e7bd64e",
+        product_id: "693bfee5f938968b5bc854f1",
+        quantity: 22
+    }
+    // let c = await cartMongoModel2?.create(cobj)
+    // console.log(c, 'cccccccccc')
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    // aggregation means it group the data from multiple document into a single document based on the specified expression. 
+    // it consist of several stages, each stage transforming the data in some way.
+    // the ouput of one stage is input of second stage and so on
 
     // ---------------------------------------------------------------------------------------------------
+    // // ---------------------------------------------------------------------------------------------------
+    // get =await userMongoModel2.aggregate([
+    //     {$match:{user_type:'admin'}}, // fetch only those whos have 'user_type' is 'admin' 
+
+    //     {$group:{_id:"$age",name_arr:{$push:'$name'}}},// $group operator groups doc by age field, creating new doc for each unique age value.
+    //     // _id field in the group , stage specify the field based on which the doc will be grouped   
+    // // the name_arr field uses the $push operator to add the 'name' field from each document in group to array 
+    // ])
+    get = await userMongoModel2.aggregate([
+        // { $match: { user_type: 'admin' } },
+        { $match: { user_type: { $regex: '^ad' } } },
+        // { $group: { _id: "$age", name_arr: { $push: '$name' } } }
+        // {$group :{_id :"$age",doc_whole:{$push:'$$ROOT'} }}
+        { $group: { _id: "$age", doc: { $push: '$$ROOT' } } }
+
+    ])
+
+    // console.log(get, 'gettttffgbbmvkvl')
+    // // ---------------------------------------------------------------------------------------------------
+
+    // get = await userMongoModel2.aggregate([
+    //     { $match: { user_type: 'admin' } }, // fetch only those whos have 'user_type' is 'admin' 
+
+    //     { $group: { _id: "$age", doc_whole: { $push: '$$ROOT' } } },
+    //     // $$ROOT it present the whole document 
+    // ]) 
+    // ---------------------------------------------------------------------------------------------------
+    // give a count per age
     // ✔ 17. Aggregation(Group + Count)
     //     db.users.aggregate([
     //         { $group: { _id: "$city", total: { $sum: 1 } } }
     //     ])
-    // ---------------------------------------------------------------------------------------------------
+    // get = await userMongoModel2.aggregate([
+    //     { $match: { user_type: { $regex: "^AD", $options: "i" } } },
+    //     { $group: { _id: "$age", countTotal: { $sum: 1 } } }
+    // ])
+    get = await userMongoModel2.aggregate([
+        { $group: { _id: "$age", countTotal: { $sum: 1 } } }
+    ])
 
+    // console.log(get, 'gerfefbrbrkm')
+    // ---------------------------------------------------------------------------------------------------
     // ✔ 18. Aggregation(Match + Group + Sort)
     //     db.orders.aggregate([
     //         { $match: { status: "DELIVERED" } },
     //         { $group: { _id: "$customerId", totalAmount: { $sum: "$amount" } } },
     //         { $sort: { totalAmount: -1 } }
     //     ])
+    // get = await userMongoModel2.aggregate([
+    //     { $match: { user_type: "admin" } },
+    //     { $group: { _id: "$age", total: { $sum: 1 } } },
+    //     // {$sort:{_id:-1}}
+    //     { $sort: { total: -1 } }
+    // ])
+    // get = await userMongoModel2.aggregate([
+    //     { $match: { user_type: "admin" } },
+    //     { $group: { _id: "$age", total: { $sum: 1 } } }
+    // ])
+    // console.log(get, "'.[pppppppllll]")
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    get = await userMongoModel2.aggregate([
+        { $unwind: "$wishlist" },
+        { $group: { _id: "age", Doc: { $push: "$$ROOT" } } },
+    ])
+    // console.log(get,'lpollpollopp')
+    // ---------------------------------------------------------------------------------------------------
+    get = await userMongoModel2.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "user_id",
+                as: "productObj"
+            },
+            $lookup: {
+                from: "carts",
+                localField: "_id",
+                foreignField: "user_id",
+                as: "cartObj"
+            }
+        }
+    ])
+    // console.log(get, 'asdfghjklpoiuytrew')
+    // ------------------------------------------------------------------------------------
 
+    // get=await productMongooseModel2 .find({},{name:1,user_id:1})
+    // console.log(get,'asdfghjklpoiuytrew')
+    // ---------------------------------------------------------------------------
     // ✔ 19. Join(lookup) — fetch data from 2 collections
     //     db.orders.aggregate([
     //         {
@@ -240,21 +438,22 @@ async function solMongo() {
 
     // ✔ 20. Distinct values
     //     db.users.distinct("city")
-
+    //----------------------------------------------------------------------------------
     // ✔ 22. Search in an array with AND
     // db.users.find({ skills: { $all: ["Node", "React"] } })
 
+    //----------------------------------------------------------------------------------
     // ✔ 23. Advanced match with logical operators
     //     db.users.find({
     //         $and: [{ age: { $gt: 18 } }, { verified: true }]
     //     })
 
-    // ✔ 24. Text Search(requires index)
-    //     db.products.find({ $text: { $search: "laptop" } })
-
+    //----------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
     // ✔ 25. Fetch only latest record
     //     db.logs.find().sort({ createdAt: -1 }).limit(1)
 
+    //----------------------------------------------------------------------------------
     // 🚀 Bonus — Full Pagination Query
     //     const page = 2;
     //     const size = 10;
@@ -262,7 +461,7 @@ async function solMongo() {
     //         .skip((page - 1) * size)
     //         .limit(size)
     //         .sort({ createdAt: -1 });
-    console.log(get, 'ggggg')
+    // console.log(get, 'ggggg')
 }
 // solMongo()
 
@@ -277,27 +476,63 @@ async function solMongo() {
 
 app.use("/get", async (req, res) => {
     let get = []
+
     //   get =await UserModel?.findAll({ raw: true, attributes: ['name', 'id', 'email', 'user_type'] })
-    get = await UserModel?.findAll({
-        where: { id: 16 },
-        // where: { email: { [Op.like]: '%use10%' } },
-        // raw: true,
-        attributes: ['name', 'id', 'email', 'user_type'],
+    // -----------------------------------------------------------------------------
+    get = await UserModel.findAll({
+        where: { email: { [Op.like]: '%use%' } },
         include: [
             {
                 model: productModel,
                 separate: true,
                 order: [['id', 'DESC']],
-                // where: { name: "samsung s24 ultra" }
+                include: [
+                    {
+                        model: UserModel,
+                        include: [
+                            {
+                                model: cartModel,
+                            },
+                            {
+                                model: orderModel,
+                                include: [
+                                    { model: UserModel }
+                                ]
+
+                            }
+                        ]
+                    }
+                ]
             },
             {
                 model: cartModel,
-                separate: true,
-                order: [['id', 'DESC']],
-                attributes: ['id', 'user_id', 'product_id', 'quantity']
+                // order: [['id', 'DESC']]
             }
-        ]
+        ],
+        // raw: true  //This removes Sequelize’s nesting logic
     })
+    //--------------------------------------------------------------------------------
+
+    // get = await UserModel?.findAll({
+    //     where: { id: 16 },
+    //     // where: { email: { [Op.like]: '%use10%' } },
+    //     // raw: true,
+    //     attributes: ['name', 'id', 'email', 'user_type'],
+    //     include: [
+    //         {
+    //             model: productModel,
+    //             separate: true,
+    //             order: [['id', 'DESC']],
+    //             // where: { name: "samsung s24 ultra" }
+    //         },
+    //         {
+    //             model: cartModel,
+    //             separate: true,
+    //             order: [['id', 'DESC']],
+    //             attributes: ['id', 'user_id', 'product_id', 'quantity']
+    //         }
+    //     ]
+    // })
     // get = await productModel.findAll({
     //     // raw: true,
     //     where: {},
@@ -312,7 +547,6 @@ app.use("/get", async (req, res) => {
     //     ]
     // })
     // get = await cartModel.findAll({
-    //     // raw: true,
     //     where: {},
     //     include: [
     //         {
@@ -331,8 +565,26 @@ app.use("/get", async (req, res) => {
     //         }
     //     ]
     // })
+
+    // get = await userMongoModel2.aggregate([
+    //     { $match: { user_type: 'admin' } }, // fetch only those whos have 'user_type' is 'admin' 
+
+    //     { $group: { _id: "$age", doc_whole: { $push: '$$ROOT' } } },
+    //     // $group operator groups doc by age field, creating new doc for each unique age value.
+
+    // ])
+    // get = await userMongoModel2.agrregate([
+    //     { $match: { user_type: "admin" } },
+    //     // { $group }
+    // ])
+    // get = await userMongoModel2.aggregate([
+    //     { $unwind: "$wishlist" }, // make new documents based on array's element
+    //     { $group: { _id: "age", Doc: { $push: "$$ROOT" } } },
+    // ])
+
     return res.json({ data: get })
 })
+
 async function sol() {
     console.log('first')
     let get = []
@@ -371,6 +623,7 @@ async function sol() {
     }
     // let g1 =await cartModel.create(obj)
     // console.log(g1.id,'ggggggggggg')
+    ////------------------------------------------------------------
     // await productModel.create(obj)
     // await orderModel.create(obj)
     // --------------------------------------------------------------------------------------
@@ -383,26 +636,78 @@ async function sol() {
         offset,
         // order: [[Sequelize.literal("CAST( amount as UNSIGNED)"), 'ASC']]
     })
-
+    order = await UserModel.findAll({
+        where: { user_type: { [Op.like]: "%cand%" } },
+        include: [
+            // {model:UserModel}
+        ], raw: true,
+        limit, offset
+    })
+    order = await orderModel.findAll({ raw: true })
     // console.log(order, "findall")
+    // return
     //-------db query--------------------------------
     let str = `
 SELECT ordermodel.amount, ordermodel.products FROM ordermodel
 WHERE JSON_CONTAINS(products,'"3"')
 `
     str = `
-SELECT ordermodel.user_id,ordermodel.id AS MAINID , ordermodel.amount,ordermodel.products FROM ordermodel 
+SELECT ordermodel.amount,ordermodel.products,ordermodel.created_at FROM ordermodel 
+-- WHERE JSON_CONTAINS(products,'"3"')
+WHERE Date(created_at) = '2025-11-08' 
+`
+    // str =`
+    // SELECT ordermodel.amount, ordermodel.products,ordermodel.created_at FROM ordermodel
+    // WHERE JSON_CONTAINS(products,'"3"')
+    // AND Date(created_at)='2025-11-08'
+    // `
+
+
+
+    str = `SELECT ordermodel.id, ordermodel.products, ordermodel.created_at FROM ordermodel 
 WHERE JSON_CONTAINS(products,'"3"') 
-LIMIT 11 OFFSET 1
+AND Date(created_at)='2025-11-08'
+`
+    // let [g] = await dbconnection.query(str)
+    // console.log(g, 'gggg')
+    // ----------------------------------------------------------------------------
+    // str = `
+    // SELECT ordermodel.user_id,ordermodel.id AS MAINID , ordermodel.amount,ordermodel.products FROM ordermodel 
+    // WHERE JSON_CONTAINS(products,'"3"') 
+    // LIMIT 11 OFFSET 1
+    // `
+    // str = `SELECT id,products,created_at,COUNT(*)AS order_count FROM ordermodel
+    // WHERE id = '9'
+    // AND order_id = '417173'
+    // AND Date(created_at) = '2025-11-09'
+    // `
+    str = `SELECT user_id,COUNT(*) AS totalCount FROM ordermodel 
+    WHERE Date(created_at)='2025-11-08'
+GROUP BY user_id
+ORDER BY totalCount DESC
+LIMIT 1 OFFSET 0;
+    `
+    str = `SELECT user_id, COUNT(*) AS totalCount FROM ordermodel
+    WHERE Date(created_at)='2025-11-08'
+    GROUP BY user_id 
+    ORDER BY totalCount DESC 
+    `
+    str = `SELECT user_id , COUNT(*) AS t FROM ordermodel 
+WHERE Date(created_at)='2025-11-08'
+GROUP BY user_id
+ORDER BY t DESC
+LIMIT 1
 `
     let [g] = await dbconnection.query(str)
-    // console.log(g, 'gggg')
+    // console.log(g, '. gggg.....')
+    // 2
 
     //-------db query--------------------------------
     let str1 = `
     SELECT * FROM ordermodel 
     ORDER BY CAST (amount AS UNSIGNED) DESC 
-    LIMIT 1 OFFSET 1     `
+    LIMIT 1 OFFSET 1 `
+
     str1 = `SELECT ordermodel.amount,ordermodel.id AS MAINID, ordermodel.products FROM ordermodel
 ORDER BY CAST(amount AS UNSIGNED) DESC 
 LIMIT 1 OFFSET 2      
@@ -430,12 +735,19 @@ LIMIT 2 offset 0
     SELECT order_id AS ID,amount AS amt,id FROM ordermodel 
     WHERE amount>600 `
     str32 = `SELECT order_id,amount FROM ordermodel 
-    WHERE amount>2100  
+    WHERE amount > 2100  
     ORDER BY CAST(amount AS UNSIGNED) DESC
     limit 3 OFFSET 0
     `
+    str32 = `SELECT order_id AS mainID, amount AS amt, id FROM ordermodel
+    WHERE amount>600
+    ORDER BY id ASC
+    LIMIT 10 OFFSET 2 
+
+    `
     let [order32] = await dbconnection.query(str32)
     // console.log(order32,"orde3232322323232")
+    // return
     //--------------------------------------------------------------------------------
 
     // ✅ 3. ORDER BY → Sorting (ASC / DESC)
@@ -467,26 +779,33 @@ LIMIT 2 offset 0
      */
 
     let str6 = `
-    SELECT ordermodel.id AS MAINID , ordermodel.amount AS AMT,ordermodel.user_id, user.id, user.name FROM ordermodel
+    SELECT ordermodel.id AS MAINID, ordermodel.amount AS AMT,ordermodel.user_id, user.id AS USERID, user.name FROM ordermodel
     INNER JOIN user
     ON ordermodel.user_id = user.id
     ORDER BY MAINID DESC
     limit 3 offset 0 
     `
-    str6 = `
-    SELECT ordermodel.id ,ordermodel.amount , ordermodel.user_id AS USERID, user.name FROM ordermodel 
-    INNER JOIN user ON ordermodel.user_id=user.id
-ORDER BY id DESC
-LIMIT 55 OFFSET 1
-    `
-    str6 = `SELECT ordermodel.id AS MAINID , ordermodel.user_id,ordermodel.amount,user.id from ordermodel
-    INNER JOIN user on ordermodel.user_id = user.id
-    WHERE amount>2000 OR ordermodel.id=8
-ORDER BY CAST(MAINID AS UNSIGNED) DESC 
-LIMIT 3 OFFSET 0
-    `
+
+    //     str6 = `
+    //     SELECT ordermodel.id ,ordermodel.amount , ordermodel.user_id AS USERID, user.name FROM ordermodel 
+    //     INNER JOIN user ON ordermodel.user_id=user.id
+    // ORDER BY id DESC
+    // LIMIT 55 OFFSET 1
+    //     `
+    //     str6 = `SELECT ordermodel.id AS MAINID , ordermodel.user_id,ordermodel.amount,user.id from ordermodel
+    //     INNER JOIN user ON ordermodel.user_id = user.id
+    //     WHERE amount>2000 OR ordermodel.id=8
+    // ORDER BY CAST(MAINID AS UNSIGNED) DESC 
+    // LIMIT 3 OFFSET 0
+    //     `
+    str6 = `SELECT ordermodel.id AS main, user_id, amount,user.id FROM ordermodel
+INNER JOIN user ON ordermodel.user_id=user.id
+ORDER BY main DESC 
+LIMIT 44 OFFSET 0
+`
     let [order6] = await dbconnection.query(str6)
     // console.log(order6, "ordeeee66")
+    // return
     //--------------------------------------------------------------------------------
 
     // ✅ 7. LEFT JOIN → Fetch all from left table + matching from right  question is which one is left table and right table
